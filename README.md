@@ -1,4 +1,4 @@
-# RS_4months
+## RS_4months
 Scripts for the study:
 
 "Group-level cortical functional connectivity patterns using fNIRS: Assessing the effect of bilingualism in young infants"
