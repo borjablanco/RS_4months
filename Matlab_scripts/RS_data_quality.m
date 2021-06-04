@@ -12,7 +12,10 @@
 % 2 - POWER SPECTRAL DENSITY ASSESSMENT: Script to plot power spectral density of HbO and HbR.
 % Three visualization methods are presented
 
-% 3 -
+% 3 -  3 - HbO-HbR STATISTICAL RELATIONSHIP_ Script to plot
+% 1) HbO and HbR adjacency matrices (HbO, HbR, HbO-HbR) and
+% 2) channelwise phase difference between HbO and HbR
+% These metrics can also be computed after bandpass filtering HbO and HbR
 
 % ################################# 1 - TIME SERIES VISUALIZATION
 % The following variables should be defined in advance:
@@ -32,23 +35,32 @@
 % Create time vector (to display seconds instead of samples in plots)
 t = (0:N-1)/sf;
 % -------------------- Visualization method 1 – 2D line plots % Plot raw intensity time series
+% Create figure
+fig1 = figure; set(fig1, 'units', 'normalized', 'outerposition', [0 0 1 1], ...
+    'Color', [1 1 1]);
+set(0, 'DefaultAxesFontSize', 24, 'DefaultAxesTitleFontWeight', 'normal') 
+
+% Plot raw intensity time series - wavelength 1
 subplot(3,2,1)
 plot(t, data_raw_wl1)
 % Add titles, axes limits and axes labels
 set(gca, 'YScale', 'log')
 xlim([0 t(end)]); xlabel('Time (seconds)')
 ylim([0 2.5]); ylabel('Intensity (log)'); title ('wl1 - 760 nm');
+
 % Same steps for wavelength 2
 subplot(3,2,2)
 plot(t, data_raw_wl2)
 set(gca, 'YScale', 'log')
 xlim([0 t(end)]); xlabel('Time (seconds)')
 ylim([0 2.5]); ylabel('Intensity (log)'); title ('wl2 - 850 nm');
-% Plot OD time series
+
+% Plot OD time series - wavelength 1
 subplot(3,2,3)
 plot(t, data_OD_wl1)
 xlim([0 t(end)]); xlabel('Time (seconds)')
 ylim([-1.5 2]); ylabel('OD (A.U.)');
+
 % Same steps for wavelength 2
 subplot(3,2,4)
 plot(t, data_OD_wl2)
@@ -85,11 +97,16 @@ fft_HbR = fft(data_HbR); % Fourier Transform HbR data
 fft_HbR = 2*abs(fft_HbR(1:N/2+1, :)); % Keep only first half
 
 % HbO
+% Create figure
+fig1 = figure; set(fig1, 'units', 'normalized', 'outerposition', [0 0 1 1], ...
+    'Color', [1 1 1]);
+set(0, 'DefaultAxesFontSize', 24, 'DefaultAxesTitleFontWeight', 'normal') 
+
 % --------------- Visualization method 1 (mean HbR PSD across channels)
 subplot(2,3,1)
 plot(freq, mean(fft_HbO,2), 'r', 'linewidth', 1); box off
 xlim([0 sf/2]); xlabel('Frequency (Hertz)');
-% ylim([0 800]); % adjust limits
+ylim([0 800]); % adjust limits
 title ('Mean PSD HbO')
 
 % --------------- Visualization method 2 (mean PSD across channels ,log scale)
@@ -123,7 +140,7 @@ colormap jet; colorbar
 subplot(2,3,4)
 plot(freq, mean(fft_HbR,2), 'b', 'linewidth', 1); box off
 xlim([0 sf/2]); xlabel('Frequency (Hertz)');
-% ylim([0 100]); % adjust limits
+ylim([0 100]); % adjust limits
 title ('Mean PSD HbR')
 
 % --------------- Visualization method 2 (mean PSD across channels ,log scale)
@@ -142,9 +159,6 @@ title ('PSD HbR (channel by channel)')
 colormap jet; colorbar
 
 % ######################## 3 - HbO-HbR STATISTICAL RELATIONSHIP
-% Script to plot 1) HbO and HbR adjacency matrices (HbO, HbR, HbO-HbR) and
-% 2) channelwise phase difference between HbO and HbR
-
 % The following variables should be defined in advance:
 % data_HbO and data_HbR (raw HbO and HbR concentration data)
 % ch = number of channels of the dataset
@@ -153,6 +167,11 @@ colormap jet; colorbar
 % data_HbO =
 % data_HbR =
 % ch = size(data_HbO, 2); % if data organized as time x channels
+
+% Create figure
+fig1 = figure; set(fig1, 'units', 'normalized', 'outerposition', [0 0 1 1], ...
+    'Color', [1 1 1]);
+set(0, 'DefaultAxesFontSize', 24, 'DefaultAxesTitleFontWeight', 'normal') 
 
 % Compute and plot adjacency matrices
 subplot(1,4,1)
@@ -169,6 +188,7 @@ subplot(1,4,3)
 imagesc(corr(data_HbO, data_HbR), [-1 1]); colorbar
 xlabel('Channels');
 title('HbO-HbR'); axis square
+colormap jet
 
 % Compute hPod value (HbO-HbR phase difference as described in Watanabe et al., 2017)
 hPod = zeros(1, ch);
@@ -189,31 +209,9 @@ for nch = 1:ch
     hPod (nch) = angle(mean(exp(sqrt(-1)*ph_dif)));
 end
 
+% Plot hpod
 subplot(1,4,4)
-h = rose (hPod, 10);
-set(h, 'linewidth', 4, 'color', 'b')
+h = polarhistogram (hPod, 10); % adjust number of bins
+set(h, 'linewidth', 1, 'FaceColor', 'b')
 title('Phase difference HbO-HbR (degrees)')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
