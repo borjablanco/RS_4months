@@ -1,9 +1,13 @@
+% #######################################
+% THIS SCRIPT IS NOT FINISHED
+% #######################################
 
 % Script to convert from .nirs to .snirf
-% Created by Borja Blanco 03/02/2021
-% bb579@cam.ac.uk
-addpath(genpath('/Users/borjablanco/Documents/MATLAB/toolboxes/Homer3-master'))
+% to load RS4 data from https://osf.io/7fzkm/
+% using Homer3 functions https://github.com/BUNPC/Homer3
 
+% Add path Homer3
+addpath(genpath('/Users/borjablanco/Documents/MATLAB/toolboxes/Homer3-master'))
 
 % Convert all files in a folder
 rsdataset = Nirs2Snirf('/Users/borjablanco/Nextcloud/RS_DATASET/data_nirs');
@@ -30,6 +34,5 @@ snirf2.Info()
 % TESTS
 data = load('prueba.nirs', '-mat');
 
-data.metaDataTags.MeasurementDate = '2021-01-30';
 
 
