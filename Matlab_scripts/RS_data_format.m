@@ -15,8 +15,8 @@ rsdataset = Nirs2Snirf('/Users/borjablanco/Nextcloud/RS_DATASET/data_nirs');
 % Or one by one
 sub = dir('*.nirs');
 
-for nsub = 1:lenght(sub)
-    Nirs2Snirf('/Users/borjablanco/Nextcloud/RS_DATASET/data_nirs', ['/Users/borjablanco/Nextcloud/RS_DATASET/data_nirs/' sub(nsub).name])
+for nsub = 1:length(sub)
+    Nirs2Snirf('/Users/borjablanco/Downloads/nirs_formatting/', ['/Users/borjablanco/Downloads/nirs_formatting/' sub(nsub).name])
 end
 
 % snirf won't accept structures, it needs variables
@@ -27,7 +27,7 @@ save('prueba.nirs', '-struct', 'data')
 
 % To load snirf files into the workspace
 snirf2 = SnirfClass();
-snirf2.Load('RS4_SL_4216.snirf');
+snirf2.Load('RS4_SL_4252.snirf');
 snirf2.Info()
 
 
